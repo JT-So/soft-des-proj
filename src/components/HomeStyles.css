@@ -1,0 +1,43 @@
+.Home1 {
+    margin: 4rem 6rem;
+  }
+  
+  .Home1 h1 {
+    font-size: 3rem;
+    text-align: center;
+    padding-bottom: 1rem;
+  }
+  .Home1 p {
+    text-align: start;
+  }
+  
+  .Pasig {
+    margin: 4rem 6rem;
+  }
+  
+  .Pasig h2 {
+    font-size: 2rem;
+  }
+  
+  .Pasig p {
+    display: block;
+    margin-top: 20px;
+    text-align: start;
+  }
+  
+  .image {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4.5rem;
+  }
+  
+  @media screen and (max-width: 850px) {
+    .Home {
+      margin: 4rem 2rem;
+    }
+    .Pasig {
+      margin: 4rem 2rem;
+    }
+  }
+  
