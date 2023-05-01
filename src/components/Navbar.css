@@ -48,11 +48,11 @@
     transition: all 0.2s ease-in-out;
   }
   
-  .nav-links-mobile {
+  .button {
     display: none;
   }
   
-  button {
+  .nav-links-mobile {
     padding: 0.5rem 1rem;
     white-space: nowrap;
     border-radius: 0.3rem;
@@ -61,9 +61,12 @@
     border: none;
     cursor: pointer;
     transition: 0.2s ease-in-out;
+    background-color: #fff;
+    text-decoration: none;
+    color: black;
   }
   
-  button:hover {
+  .nav-links-mobile:hover {
     background-color: #151516;
     color: #fff;
   }

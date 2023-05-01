@@ -14,7 +14,7 @@ function Home() {
         title="We're Here to Help"
         text="Report any issues or feedback you have for us."
         buttonText="Get Started"
-        url="../creds/login.js"
+        url="/login"
         btnClass="show"
       />
       <Home1 />
