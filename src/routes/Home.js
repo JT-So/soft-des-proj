@@ -3,8 +3,13 @@ import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
 import HomeImg from "../assets/a.png";
 import Footer from "../components/footer";
+import { UserAuth } from "../AuthContext";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
+
+
   return (
     <>
       <Navbar />

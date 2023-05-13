@@ -1,49 +1,73 @@
-import { Component, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./Navbar.css";
 import { MenuItems } from "./MenuItems";
 import { Link, useNavigate} from "react-router-dom";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "../firebase";
+import { UserAuth } from "../AuthContext";
+import { addDoc, collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
+
 const Navbar = () => {
+  const [checkUser, setCheckUser] = useState(0)
   const [clicked, setClicked] = useState(false);
-  const [isAuth, setIsAuth] = useState(localStorage.getItem("IsAuth"))
   const navigate = useNavigate();
+  const userCollectionRef = collection(db, "Users");
+  const { googleSignIn, user, userName, logOut } = UserAuth();
+
   const handleClick = () => {
     setClicked(true);
   }
-  const [authUser, setAuthUser] = useState(null);
+
+  const handleSignOut = async () => {
+    try {
+        await logOut()
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+  const handleGoogleSignIn = async () => {
+    try {
+        await googleSignIn()
+    } catch (error){
+        console.log(error)
+    }
+  }
+
+  const createUser = async () => {
+    try {
+        const userData = await getDocs(userCollectionRef);
+        userData.docs.forEach(async (doc) => {
+            console.log(doc.data().email)
+            if (doc.data().email !== user?.email){
+                setCheckUser(1)
+            }
+        })
+        if (checkUser === 1) {
+            console.log("creating")
+            await addDoc(userCollectionRef, {
+                name: user?.displayName,
+                email: user?.email
+            })
+        }
+    } catch (error) {
+        console.log(error)
+    }
+  }
 
   useEffect(() => {
-      const listen = onAuthStateChanged(auth, (user) => {
-        console.log("AuthChanged")
-        setIsAuth(localStorage.getItem("IsAuth"))
-        if (user) {
-          if (isAuth == "true") {
-            setAuthUser(user);
-          }
-          else {
-            setAuthUser(null);
-          }
+    if (user != null) {
+        if (userName === "administrator") {
+            console.log("admining")
+            navigate('/admin');
         }
         else {
-            setAuthUser(null);
+            console.log("boarding")
+            createUser()
         }
-      })
-      return()=>{
-        listen();
-      }
+    }
 
-  }, []);
+  }, [user])
 
-  const userSignOut = (e) => {
-    e.preventDefault();
-    signOut(auth).then(() => {
-      console.log('Signed out')
-      localStorage.setItem("IsAuth", false);
-    })
-    .then(navigate('/login'))
-    .catch(error => console.log(error))
-  }
   return (
     <nav className="NavbarItems">
       <h1 className="navbar-logo"> Enviro Solutions </h1>
@@ -66,17 +90,17 @@ const Navbar = () => {
           );
         })}
         <li>
-          {authUser ? <Link className="nav-links" to="/board" style={{display: "flex"}}>
+          {user ? <Link className="nav-links" to="/board" style={{display: "flex"}}>
             Board
           </Link> : <Link className="nav-links" to="/board" style={{display: "none"}}>
             Board
           </Link>}
         </li>
         <li>
-          {authUser ? <Link className="nav-links-mobile" onClick={userSignOut}>
-            Sign out
-          </Link> : <Link className="nav-links-mobile" to="/login">
-            Sign Up
+          {user ? <Link className="nav-links-mobile" onClick={handleSignOut}>
+            Sign Out
+          </Link> : <Link className="nav-links-mobile" onClick={handleGoogleSignIn}>
+            Sign In
           </Link>}
         </li>
       </ul>

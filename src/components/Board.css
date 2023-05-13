@@ -101,15 +101,3 @@ textarea {
     height: max-content;
     padding: 2rem 0;
 }
-.post_Buttons {
-    display: flex;
-    gap: 1rem;
-    padding: 0.5rem 1rem;
-    background-color: bisque;
-}
-.up_Btn {
-    padding: .25rem 1rem;
-}
-.comment_Btn {
-    padding: .25rem 1rem;
-}
