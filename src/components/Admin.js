@@ -3,6 +3,7 @@ import { db } from "../firebase";
 import "./Admin.css";
 import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
 const Admin = () => {
+  console.log("")
   const [pendingList, setPendingList] = useState([]);
   const postsCollectionRef = collection(db, "posts");
   const [viewPostStatus, setViewPost] = useState(false);
