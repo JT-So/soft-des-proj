@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
 import "./Admin.css";
-import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
+import { collection, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore";
 const Admin = () => {
   console.log("")
   const [pendingList, setPendingList] = useState([]);
@@ -13,6 +13,11 @@ const Admin = () => {
   const view_post = (post) => {
     setViewPost(!viewPostStatus)
     setPostItem(post)
+  }
+
+  const handleDelete = async (id) => {
+    const postDoc = doc(db, "posts", id);
+    await deleteDoc(postDoc).then(setStatus(!statChange))
   }
 
   const handlePostStatus = async (post) => {
@@ -74,9 +79,12 @@ const Admin = () => {
             (post.status == "pending") && <div className="pending_Container" key={post.id}>
               <div className="pending_item">{post.id}</div>
               <div className="pending_item">{post.date.day}-{post.date.month}-{post.date.year}</div>
-              <div className="pending_item">{post.author.email}</div>
+              <div className="pending_item">{post.author.name}</div>
               <div className="pending_item">{post.category}</div>
-              <div className="pending_item view_post" onClick={() => view_post(post)}> View </div>
+              <div className="pending_item view_post"> 
+                <h5 onClick={() => view_post(post)}>View</h5>
+                <button onClick={() => handleDelete(post.id)}>X</button>
+              </div>
               <div className="pending_item " onClick={() => handlePostStatus(post)}>Mark as Done</div>
             </div>
           )
@@ -95,14 +103,18 @@ const Admin = () => {
             (post.status == "finish") && <div className="finish_Container" key={post.id}>
               <div className="finish_item">{post.id}</div>
               <div className="finish_item">{post.date.day}-{post.date.month}-{post.date.year}</div>
-              <div className="finish_item">{post.author.email}</div>
+              <div className="finish_item">{post.author.name}</div>
               <div className="finish_item">{post.category}</div>
-              <div className="finish_item view_post" onClick={() => view_post(post)}> View </div>
+              <div className="finish_item view_post"> 
+                <h5 onClick={() => view_post(post)}>View</h5>
+                <button onClick={() => handleDelete(post.id)}>X</button>
+              </div>
             </div>
           )
         })}
       </div>}
     </div>
+
     {viewPostStatus && <div className="postModal" onClick={() => view_post(null)}>
       <div className="post_ContainerA">
         <div className="post_HeaderA">
@@ -121,6 +133,7 @@ const Admin = () => {
         </div>
       </div>
     </div>}
+
     </>
   );
 }

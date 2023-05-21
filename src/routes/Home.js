@@ -6,23 +6,36 @@ import Footer from "../components/footer";
 import { UserAuth } from "../AuthContext";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Board from "../components/Board";
 
 function Home() {
+  const { googleSignIn, user, userName, logOut } = UserAuth();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (user != null) {
+        if (userName === "administrator") {
+            console.log("admining")
+            navigate('/admin');
+        }
+        else {
+            console.log("boarding")
+        }
+    }
 
+  }, [user])
 
   return (
     <>
       <Navbar />
-      <Hero
+      {user ? null : <Hero
         cName="hero"
         heroImg={HomeImg}
         title="We're Here to Help"
         text="Report any issues or feedback you have for us."
         buttonText="Get Started"
-        url="/login"
         btnClass="show"
-      />
-      <Home1 />
+      />}
+      {user ? <Board/> : <Home1/>}
       <Footer />
     </>
   );

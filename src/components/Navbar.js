@@ -41,14 +41,14 @@ const Navbar = () => {
             if (doc.data().email !== user?.email){
                 setCheckUser(1)
             }
+            if (checkUser === 1) {
+                console.log("creating")
+                await addDoc(userCollectionRef, {
+                    name: user?.displayName,
+                    email: user?.email
+                }).then(()=>setCheckUser(0))
+            }
         })
-        if (checkUser === 1) {
-            console.log("creating")
-            await addDoc(userCollectionRef, {
-                name: user?.displayName,
-                email: user?.email
-            })
-        }
     } catch (error) {
         console.log(error)
     }
@@ -89,13 +89,13 @@ const Navbar = () => {
             </li>
           );
         })}
-        <li>
+        {/* <li>
           {user ? <Link className="nav-links" to="/board" style={{display: "flex"}}>
             Board
           </Link> : <Link className="nav-links" to="/board" style={{display: "none"}}>
             Board
           </Link>}
-        </li>
+        </li> */}
         <li>
           {user ? <Link className="nav-links-mobile" onClick={handleSignOut}>
             Sign Out
